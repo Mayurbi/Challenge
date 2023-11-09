@@ -1,0 +1,5 @@
+package enuns;
+
+public enum ExamesEnum {
+	URINA, FEZES, UREIA, CREATINA, TRANSAMINASES, COLESTEROL, GLICEMIA, HEMOGRAMA, TSH, T4
+}
