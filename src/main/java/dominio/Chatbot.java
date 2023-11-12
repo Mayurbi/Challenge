@@ -1,6 +1,5 @@
 package dominio;
 
-import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -8,8 +7,8 @@ import java.util.function.Supplier;
 
 public class Chatbot {
 	private Map<String, Supplier<String>> respostas;
-	private Paciente pacienteAtual;
-	private Medico medicoAtual;
+	private Paciente paciente;
+	private Medico medico;
 	private Prontuario prontuarioAtual;
 
 	public Chatbot() {
@@ -49,6 +48,7 @@ public class Chatbot {
 	}
 
 	private String agendarProcedimento() {
+
 		return "Procedimento agendado. Aguarde confirmação.";
 	}
 
@@ -69,16 +69,16 @@ public class Chatbot {
 	}
 
 	private String obterInformacoesPaciente() {
-		if (pacienteAtual != null) {
-			return "Paciente: " + pacienteAtual.getNome() + ", Idade: " + pacienteAtual.getTelefone();
+		if (paciente != null) {
+			return "Paciente: " + paciente.getNome() + ", CPF e RG: " + paciente.getId();
 		} else {
 			return "Nenhum paciente selecionado.";
 		}
 	}
 
 	private String obterInformacoesMedico() {
-		if (medicoAtual != null) {
-			return "Médico: " + medicoAtual.getNome() + ", Especialidade: " + medicoAtual.getEspecializacao();
+		if (medico != null) {
+			return "Médico: " + medico.getNome() + "CRM e CPF do médico: "+ medico.getId() + ", Especialidade: " + medico.getEspecializacao();
 		} else {
 			return "Nenhum médico selecionado.";
 		}
@@ -94,17 +94,12 @@ public class Chatbot {
 		}
 	}
 
-	private String normalizarString(String input) {
-		String normalizedString = Normalizer.normalize(input, Normalizer.Form.NFD);
-		return normalizedString.replaceAll("[^\\p{ASCII}]", "").toLowerCase();
-	}
-
 	public void configurarPaciente(Paciente paciente) {
-		this.pacienteAtual = paciente;
+		this.paciente = paciente;
 	}
 
 	public void configurarMedico(Medico medico) {
-		this.medicoAtual = medico;
+		this.medico = medico;
 	}
 
 	public void configurarProntuario(Prontuario prontuario) {
@@ -112,7 +107,7 @@ public class Chatbot {
 	}
 
 	public String obterResposta(String pergunta) {
-		Supplier<String> resposta = respostas.getOrDefault(normalizarString(pergunta),
+		Supplier<String> resposta = respostas.getOrDefault(pergunta.toLowerCase(),
 				() -> "Desculpe, não entendi a pergunta.");
 		return resposta.get();
 	}
